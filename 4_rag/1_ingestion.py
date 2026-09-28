@@ -1,17 +1,21 @@
-from langchain_unstructured import UnstructuredLoader
-from langchain_text_splitters import CharacterTextSplitter
+import os
+
+from dotenv import load_dotenv
 from langchain_openai import OpenAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
-
-import os
-from dotenv import load_dotenv
+from langchain_text_splitters import CharacterTextSplitter
+from langchain_unstructured import UnstructuredLoader
 
 load_dotenv()
 
 
 if __name__ == "__main__":
     print("Loading....")
-    loader = UnstructuredLoader(file_path="/Users/debasispanda/Workspace/Learnings/AI/langchain-demo/4_rag/vector-db.txt", chunking_strategy="basic", max_characters=1000000)
+    loader = UnstructuredLoader(
+        file_path="/Users/debasispanda/Workspace/Learnings/AI/langchain-demo/4_rag/vector-db.txt",
+        chunking_strategy="basic",
+        max_characters=1000000,
+    )
     document = loader.load()
 
     print("Splitting....")
@@ -26,5 +30,3 @@ if __name__ == "__main__":
         chunks, embeddings, index_name=os.environ["PINECONE_INDEX"]
     )
     print("finish")
-
-

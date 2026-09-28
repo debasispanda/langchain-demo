@@ -1,9 +1,9 @@
-import os
 from dotenv import load_dotenv
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 
 load_dotenv()
+
 
 def main():
     information = """
@@ -35,16 +35,12 @@ In May 2024, OYO reported its first-ever profit after tax (PAT) of ₹229 crore 
     """
 
     summary_prompt_template = PromptTemplate(
-        input_variables=["information"],
-        template=prompt_template
+        input_variables=["information"], template=prompt_template
     )
 
-    llm = ChatOpenAI(
-        model="gpt-5.4-mini",
-        temperature=0
-    )
+    llm = ChatOpenAI(model="gpt-5.4-mini", temperature=0)
 
-    chain  = summary_prompt_template | llm
+    chain = summary_prompt_template | llm
 
     response = chain.invoke(input={"information": information})
     print(response.content)

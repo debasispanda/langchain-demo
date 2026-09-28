@@ -1,10 +1,11 @@
 from dotenv import load_dotenv
 from langchain.agents import create_agent
+from langchain_core.messages import HumanMessage
+from langchain_openai import ChatOpenAI
+
 # from langchain.tools import tool
 from langchain_tavily import TavilySearch
 
-from langchain_core.messages import HumanMessage
-from langchain_openai import ChatOpenAI
 # from tavily import TavilyClient
 
 load_dotenv()
@@ -38,9 +39,10 @@ query = """
     Required skills are React, NodeJS, Python. Provide the links of jobs under 50 applications.
 """
 
+
 def main():
     print("Hello from langchain-demo!")
-    response = agent.invoke({ "messages": [HumanMessage(content=query)] })
+    response = agent.invoke({"messages": [HumanMessage(content=query)]})
     print(response["messages"][-1].content)
 
 

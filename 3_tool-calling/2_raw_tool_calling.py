@@ -1,11 +1,12 @@
+from dotenv import load_dotenv
 from langsmith import traceable
 from ollama import chat
 
-from dotenv import load_dotenv
 load_dotenv()
 
 MODEL = "qwen3.5:2b"
-MAX_ITERATIONS=10
+MAX_ITERATIONS = 10
+
 
 @traceable(run_type="tool")
 def get_product_price(product_name: str) -> float:
@@ -17,9 +18,12 @@ def get_product_price(product_name: str) -> float:
     }
     return product_map.get(product_name, 0.0)
 
+
 @traceable(run_type="tool")
 def apply_discount(product_price: float, discount_tier: str) -> float:
-    print(f"    >> Executing apply_discount(product_price='{product_price}', discount_tier='{discount_tier  }')")
+    print(
+        f"    >> Executing apply_discount(product_price='{product_price}', discount_tier='{discount_tier  }')"
+    )
     discount_map = {
         "silver": 5,
         "gold": 10,
@@ -27,6 +31,7 @@ def apply_discount(product_price: float, discount_tier: str) -> float:
     }
     discount = discount_map.get(discount_tier, 0)
     return product_price * (1 - discount / 100)
+
 
 tools_for_llm = [
     {
@@ -39,12 +44,12 @@ tools_for_llm = [
                 "properties": {
                     "product_name": {
                         "type": "string",
-                        "description": "The name of the product. e.g., 'laptop', 'mobile', 'television'."
+                        "description": "The name of the product. e.g., 'laptop', 'mobile', 'television'.",
                     }
                 },
-                "required": ["product_name"]
-            }
-        }
+                "required": ["product_name"],
+            },
+        },
     },
     {
         "type": "function",
@@ -56,17 +61,17 @@ tools_for_llm = [
                 "properties": {
                     "product_price": {
                         "type": "number",
-                        "description": "The original price of the product."
+                        "description": "The original price of the product.",
                     },
                     "discount_tier": {
                         "type": "string",
-                        "description": "The discount tier to apply (e.g., 'silver', 'gold', 'platinum')."
-                    }
+                        "description": "The discount tier to apply (e.g., 'silver', 'gold', 'platinum').",
+                    },
                 },
-                "required": ["product_price", "discount_tier"]
-            }
-        }
-    }
+                "required": ["product_price", "discount_tier"],
+            },
+        },
+    },
 ]
 
 tools_map = {
@@ -83,25 +88,24 @@ messages: list = [
             "1. Always use the provided tools to get product prices and apply discounts."
             "2. Never make assumptions about product prices or discounts."
             "3. Respond only with the output of the tools, do not provide additional commentary."
-        )
+        ),
     }
 ]
+
 
 @traceable(name="Ollama Chat", run_type="llm")
 def ollama_chat_traced(messages: list):
     return chat(model=MODEL, tools=tools_for_llm, messages=messages)
+
 
 @traceable(name="Product Price Agent")
 def run_agent(question: str):
     print(f"\nQuestion: {question}\n")
     print("=" * 50)
 
-    messages.append({
-        "role": "user",
-        "content": question
-    })
-    
-    for i in range(1, MAX_ITERATIONS+1):
+    messages.append({"role": "user", "content": question})
+
+    for i in range(1, MAX_ITERATIONS + 1):
         print(f"\n--- Iteration {i} ---")
         response = ollama_chat_traced(messages=messages)
 
@@ -123,18 +127,21 @@ def run_agent(question: str):
 
         if tool_func is None:
             raise RuntimeError(f"Tool function for {tool_name} not found.")
-        
+
         tool_result = tool_func(**tool_args)
         print(f"[Tool result]: {tool_result}")
 
         messages.append(ai_message)
-        messages.append({
-            "role": "tool",
-            "content": str(tool_result),
-        })
+        messages.append(
+            {
+                "role": "tool",
+                "content": str(tool_result),
+            }
+        )
 
     print("\nReached maximum iterations without a final answer.")
     return None
+
 
 if __name__ == "__main__":
     print(run_agent("What is the price of a laptop after applying a gold discount?"))

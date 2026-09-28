@@ -1,13 +1,14 @@
-from operator import itemgetter
 import os
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.messages import HumanMessage
+from operator import itemgetter
+
+from dotenv import load_dotenv
 from langchain_core.documents import Document
+from langchain_core.messages import HumanMessage
 from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
-from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -21,7 +22,7 @@ vector_store = PineconeVectorStore(
 retriever = vector_store.as_retriever(search_kwargs={"k": 3})
 
 prompt_template = ChatPromptTemplate.from_template(
-"""Answer the question based only on the following context:
+    """Answer the question based only on the following context:
 
 {context}
 
@@ -30,9 +31,11 @@ Question: {question}
 Provide a detailed answer:"""
 )
 
+
 def format_docs(docs: list[Document]):
     """Formats a list of documents into a single string."""
     return "\n\n".join([doc.page_content for doc in docs])
+
 
 # ============================================================================
 # IMPLEMENTATION 0: Raw invocation without RAG)
@@ -44,6 +47,7 @@ def retrieve_without_rag(query: str):
     print("=" * 70)
     result_raw = llm.invoke([HumanMessage(content=query)])
     return result_raw.content
+
 
 # ============================================================================
 # IMPLEMENTATION 1: Without LCEL (Simple Function-Based Approach)
@@ -71,6 +75,7 @@ def retrieval_chain_without_lcel(query: str):
     # Step 5: Return the content
     return response.content
 
+
 # ============================================================================
 # IMPLEMENTATION 2: With LCEL (LangChain Expression Language) - BETTER APPROACH
 # ============================================================================
@@ -91,7 +96,7 @@ def create_retrieval_chain_with_lcel():
 
 
 if __name__ == "__main__":
-    print('Retrieving...')
+    print("Retrieving...")
     query = "What pinecone in machine learning?"
     # # =======================================
     # # Option 0: Raw invocation without RAG
