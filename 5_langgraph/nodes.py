@@ -2,7 +2,6 @@ from langgraph.graph import MessagesState
 from langgraph.prebuilt import ToolNode
 from react import llm, tools
 
-
 SYSTEM_MESSAGE = """You are a helpful assistant that can use available tools to answer user queries."""
 
 
