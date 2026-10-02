@@ -1,11 +1,10 @@
-from typing import TypedDict, Annotated
-from langchain_core.messages import BaseMessage, HumanMessage
-from langgraph.graph import StateGraph, END
-from langgraph.graph.message import add_messages
+from typing import Annotated, TypedDict
 
 from chains import generate_chain, reflection_chain
-
 from dotenv import load_dotenv
+from langchain_core.messages import BaseMessage, HumanMessage
+from langgraph.graph import END, StateGraph
+from langgraph.graph.message import add_messages
 
 load_dotenv()
 
@@ -48,10 +47,7 @@ graph = builder.compile()
 # print(graph.get_graph().draw_mermaid())
 
 if __name__ == "__main__":
-    inputs = {
-        "messages": [
-            HumanMessage(
-                content="""Make this tweet better:"
+    inputs = {"messages": [HumanMessage(content="""Make this tweet better:"
                                     @LangChainAI
             — newly Tool Calling feature is seriously underrated.
 
@@ -59,10 +55,7 @@ if __name__ == "__main__":
 
             Made a video covering their newest blog post
 
-                                  """
-            )
-        ]
-    }
+                                  """)]}
 
     result = graph.invoke(inputs)
     print(result["messages"][-1].content)
