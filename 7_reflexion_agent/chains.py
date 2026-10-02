@@ -2,8 +2,7 @@ from datetime import datetime
 
 from dotenv import load_dotenv
 from langchain_core.messages import HumanMessage
-from langchain_core.output_parsers import (JsonOutputToolsParser,
-                                           PydanticToolsParser)
+from langchain_core.output_parsers import JsonOutputToolsParser, PydanticToolsParser
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_openai import ChatOpenAI
 from schemas import AnswerQuestion, ReviseAnswer

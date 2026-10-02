@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: current file (8_agentic_rag)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "cwd": "${workspaceFolder}/8_agentic_rag",
+      "env": { "PYTHONPATH": "${workspaceFolder}/8_agentic_rag" },
+      "console": "integratedTerminal"
+    }
+  ]
+}

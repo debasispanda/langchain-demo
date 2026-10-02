@@ -5,18 +5,26 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "black>=26.5.1",
-    "isort>=9.0.1",
+    "beautifulsoup4>=4.15.0",
     "langchain>=1.4.0",
+    "langchain-chroma>=1.1.0",
     "langchain-ollama>=1.1.0",
     "langchain-openai>=1.6.0",
     "langchain-pinecone>=0.2.13",
     "langchain-tavily>=0.2.18",
     "langchain-text-splitters>=1.1.2",
     "langchain-unstructured>=1.0.1",
+    "langchainhub>=0.1.21",
     "langgraph>=1.2.11",
     "libmagic>=1.0",
     "python-dotenv>=1.2.3",
     "tavily-python>=0.8.1",
     "unstructured>=0.27.6",
+]
+
+[dependency-groups]
+dev = [
+    "black>=26.5.1",
+    "isort>=9.0.1",
+    "pytest>=9.1.1",
 ]
