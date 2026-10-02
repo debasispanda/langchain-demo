@@ -1,10 +1,9 @@
 from typing import Any
 
 from dotenv import load_dotenv
+from graph.state import GraphState
 from langchain_core.documents import Document
 from langchain_tavily import TavilySearch
-
-from graph.state import GraphState
 
 load_dotenv()
 web_search_tool = TavilySearch(max_results=3)
